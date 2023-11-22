@@ -1,6 +1,6 @@
 function generateArray(size) {
   return Array.from({ length: size }, (_, index) => ({
-    id: (index).toString(),
+    id: index,
     height: index * 10,
     isActive: false,
     isSorted: false,

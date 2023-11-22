@@ -1,36 +1,69 @@
 import React, { useEffect, useState } from "react";
+
 import { generateArray, shuffleArray } from "./Helpers/ArrayHelper.tsx";
+import { publish, subscribe } from "./Helpers/EventHelper.tsx";
+
 import { bubbleSort } from "./SortingAlgorithms/BubbleSort.tsx";
 import { insertionSort } from "./SortingAlgorithms/InsertionSort.tsx";
-import "./App.css";
-import "./Styles/Boostrap.css";
 import { quickSort } from "./SortingAlgorithms/QuickSort.tsx";
 import { mergeSort } from "./SortingAlgorithms/MergeSort.tsx";
 
-let sorted = true;
-
-function setSorted(value) {
-  console.log("sorted is " + value);
-  sorted = value;
-}
+import "./App.css";
+import "./Styles/Boostrap.css";
 
 function App() {
   let arrLength = 50;
-
   const [arr, setArr] = useState(shuffleArray(generateArray(arrLength)));
   const [selectedSort, setSelectedSort] = useState("bubbleSort");
-  const [checked, setChecked] = useState(false);
+  const [isSorting, setIsSorting] = useState(false);
   const [isSorted, setIsSorted] = useState(false);
   const [buttonText, setButtonText] = useState("SORT");
 
+  //TODO: Remove them and all their dependencies
+
+  //Initialize the app
+  useEffect(() => {
+    //Subscribe to events
+    subscribe("stopSort", () => {
+      publish("pauseSorting", null);
+    });
+
+    subscribe("sortingStopped", async () => {
+      setIsSorting(false);
+      setIsSorted(true);
+      changeText("SORT");
+    });
+
+    subscribe("sortingEnded", async (event) => {
+      //Well-known green thingy :)
+      let newArr = [...event.detail];
+      for (let i = 0; i < newArr.length; i++) {
+        newArr[i].isSorted = true;
+        setArr([...newArr]);
+        await new Promise((resolve) => setTimeout(resolve, 20));
+      }
+
+      setIsSorting(false);
+      setIsSorted(true);
+      changeText("SORT");
+    });
+
+    subscribe("sortingStarted", () => {
+      setIsSorting(true);
+      setIsSorted(false);
+    });
+  }, []);
+
+  //MAIN
+
   const sortingFunctions = {
     bubbleSort: () => {
-      console.log("Running Bubble Sort");
-      bubbleSort(arr, setArr, setChecked, setSorted, changeText);
+      console.log("Running Optimized Bubble Sort");
+      bubbleSort(arr, setArr);
     },
     insertionSort: () => {
       console.log("Running Insertion Sort");
-      insertionSort(arr, setArr, setChecked, setSorted, changeText);
+      insertionSort(arr, setArr);
     },
     quickSort: () => {
       console.log("Running Insertion Sort");
@@ -42,10 +75,6 @@ function App() {
     },
   };
 
-  const handleSortChange = (event) => {
-    setSelectedSort(event.target.value);
-  };
-
   function setIsSortedToFalse(array, handler) {
     var newArr = [...array];
     newArr.forEach((item) => {
@@ -54,47 +83,36 @@ function App() {
     });
     handler(newArr);
   }
-  const handleRunSort = () => {
-    if (sorted) {
-      setSorted(false);
-      setIsSortedToFalse(arr, setArr);
-      setArr(shuffleArray(arr));
-      setIsSorted(false);
-      if (selectedSort && sortingFunctions[selectedSort]) {
-        setChecked(true);
 
+  const handleRunSort = async () => {
+    if (isSorting) {
+      publish("stopSort", null);
+      setIsSorting(true);
+    } else {
+      if (isSorted) {
+        setIsSorted(false);
+        setIsSortedToFalse(arr, setArr);
+        setArr(shuffleArray(arr));
+        await new Promise((resolve) => setTimeout(resolve, 100));
+      }
+      if (selectedSort && sortingFunctions[selectedSort]) {
         changeText("SORTING...");
 
         let res = sortingFunctions[selectedSort]();
         console.log(res);
-        if (res) {
-          setChecked(false);
-        }
       }
     }
   };
-  function changeText (nextText) {
-    let charArray = buttonText.split("");
-        const clearButtonTextInterval = setInterval(() => {
-          if(charArray.pop())
-            setButtonText(charArray.join(""));
-          else{
-            clearInterval(clearButtonTextInterval);
-
-            let sortingText = nextText;
-            let newText = "";
-            charArray = sortingText.split("");
-            let newLetter: string = "";
-            const setButtonTextInterval = setInterval(() => {
-              setButtonText(newText);
-              if(newLetter = (charArray.shift() ?? ''))
-                newText += newLetter;
-              else 
-                clearInterval(setButtonTextInterval);
-            }, 50);
-          }
-        }, 50);
-  }
+  const changeText = async (newButtonText) => {
+    for (let i = 0; i < buttonText.length; i++) {
+      setButtonText(buttonText.slice(0, buttonText.length - i));
+      await new Promise((resolve) => setTimeout(resolve, 30));
+    }
+    for (let i = 0; i < newButtonText.length + 1; i++) {
+      setButtonText(newButtonText.slice(0, i));
+      await new Promise((resolve) => setTimeout(resolve, 30));
+    }
+  };
 
   return (
     <div className="App">
@@ -103,17 +121,19 @@ function App() {
           <select
             id="sortingAlgorithm"
             value={selectedSort}
-            onChange={handleSortChange}
+            onChange={(event) => {
+              setSelectedSort(event.target.value);
+            }}
           >
-            <option value="bubbleSort">Bubble Sort</option>
+            <option value="BubbleSort">Bubble Sort</option>
             <option value="insertionSort">Insertion Sort</option>
             <option value="quickSort">Quick Sort</option>
             <option value="mergeSort">Merge Sort</option>
           </select>
           <span className="focus"></span>
         </div>
-        <label className="buttonLabel" onClick={handleRunSort}>
-          <input type="checkbox" checked={checked} />
+        <label className="buttonLabel">
+          <input type="checkbox" onClick={handleRunSort} checked={isSorting} />
           <span className="buttonSpan">{buttonText}</span>
         </label>
       </div>
@@ -127,7 +147,10 @@ function App() {
               (item.isSorted ? "SortedItem" : "")
             }
             key={item.id}
-            style={{ height: item.height / 2 }}
+            style={{
+              height: item.height / 3,
+              width: "10px",
+            }}
           ></div>
         ))}
       </div>

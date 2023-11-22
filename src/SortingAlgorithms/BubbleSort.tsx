@@ -1,63 +1,57 @@
-const bubbleSort = (arr, setArrayHandler, buttonHandler, isSortedHandler, changeText) => {
-  let isSorted = true;
-  let newArr = [...arr];
-  let sortedCount = 0;
-  let comparisonIndex = 0;
+import { publish, subscribe } from "../Helpers/EventHelper.tsx";
 
-  const intervalId = setInterval(() => {
-    newArr[comparisonIndex].isActive = true;
-    newArr[comparisonIndex + 1].isActive = true;
+async function bubbleSort(oldarr, setArr) {
+  publish("sortingStarted", null);
 
-    if (newArr[comparisonIndex - 1])
-      newArr[comparisonIndex - 1].isActive = false;
+  let arr = [...oldarr];
 
-    if (comparisonIndex === 0 && newArr[newArr.length - sortedCount - 1]) {
-      newArr[newArr.length - sortedCount - 1].isActive = false;
-      if (newArr[newArr.length - sortedCount])
-        newArr[newArr.length - sortedCount].isActive = false;
-    }
+  let swapped = false;
+  for (let i = 0; i < arr.length - 1; i++) {
+    for (let j = 0; j <= arr.length - i - 2; j++) {
+      arr[j].isActive = true;
+      arr[j + 1].isActive = true;
 
-    if (
-      parseInt(newArr[comparisonIndex].id) >
-      parseInt(newArr[comparisonIndex + 1].id)
-    ) {
-      isSorted = false;
-      [newArr[comparisonIndex], newArr[comparisonIndex + 1]] = [
-        newArr[comparisonIndex + 1],
-        newArr[comparisonIndex],
-      ];
-    }
-
-    setArrayHandler([...newArr]);
-    comparisonIndex++;
-
-    if (comparisonIndex >= newArr.length - 1 - sortedCount) {
-      comparisonIndex = 0;
-      if (isSorted) {
-        clearInterval(intervalId);
-
-        let currentSortedIndex = 0;
-
-        const sortedIntervalId = setInterval(() => {
-          if (newArr[currentSortedIndex + 1]) {
-            newArr[currentSortedIndex].isSorted = true;
-            newArr[currentSortedIndex + 1].isActive = true;
-            currentSortedIndex++;
-            setArrayHandler([...newArr]);
-          } else {
-            newArr[currentSortedIndex].isSorted = true;
-            setArrayHandler([...newArr]);
-            clearInterval(sortedIntervalId);
-            buttonHandler(false);
-            isSortedHandler(true);
-            changeText("SORT");
-          }
-        }, 1);
-      } else {
-        isSorted = true;
-        sortedCount++;
+      if (arr[j].id > arr[j + 1].id) {
+        [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+        swapped = true;
       }
+
+      if (arr[j - 1]) {
+        arr[j - 1].isActive = false;
+      } else {
+        arr[arr.length - i - 1].isActive = false;
+        if (arr[arr.length - i]) arr[arr.length - i].isActive = false;
+      }
+
+      let callBack = () => {
+        if (arr[j - 1]) {
+          console.log("1212312313");
+          arr[j - 1].isActive = false;
+        } else {
+          console.log("456745674567");
+          if (arr[arr.length - i - 1]) arr[arr.length - i - 1].isActive = false;
+          if (arr[arr.length - i]) arr[arr.length - i].isActive = false;
+        }
+        i = arr.length + 1;
+        j = arr.length + 1;
+      }
+
+      if(!i && !j)
+      subscribe("stopSort", callBack);
+
+      setArr([...arr]);
+      await new Promise((resolve) => setTimeout(resolve, 20));
     }
-  }, 1);
-};
+
+    if (!swapped) {
+      break;
+    }
+    if (i > arr.length - 1) {
+      publish("sortingStopped", arr);
+      return arr;
+    }
+  }
+  publish("sortingEnded", arr);
+  return arr;
+}
 export { bubbleSort };
