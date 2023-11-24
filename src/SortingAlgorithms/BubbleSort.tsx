@@ -1,12 +1,18 @@
-import { publish, subscribe } from "../Helpers/EventHelper.tsx";
-import { delay } from "../Helpers/VisualiztionHelper.tsx";
+import { publish, subscribe } from "../Helpers/EventHelper.ts";
+import { delay } from "../Helpers/VisualiztionHelper.ts";
 
 async function bubbleSort(oldarr, setArr) {
   publish("sortingStarted", null);
 
   let arr = [...oldarr];
+  let pauseSorting: boolean = false;
+  let swapped: boolean = false;
 
-  let swapped = false;
+  subscribe("pauseSorting", () => {
+    pauseSorting = true;
+    return arr;
+  });
+
   for (let i = 0; i < arr.length - 1; i++) {
     for (let j = 0; j <= arr.length - i - 2; j++) {
       arr[j].isActive = true;
@@ -33,18 +39,17 @@ async function bubbleSort(oldarr, setArr) {
       arr[j].isActive = false;
       arr[j + 1].isActive = false;
 
-      let callBack = () => {
+      if (pauseSorting) {
         if (arr[j - 1]) {
           arr[j - 1].isActive = false;
         } else {
           if (arr[arr.length - i - 1]) arr[arr.length - i - 1].isActive = false;
           if (arr[arr.length - i]) arr[arr.length - i].isActive = false;
         }
-        i = arr.length + 1;
-        j = arr.length + 1;
-      };
-
-      if (!i && !j) subscribe("stopSort", callBack);
+        publish("sortingStopped", arr);
+        setArr(arr);
+        return;
+      }
     }
 
     if (!swapped) {

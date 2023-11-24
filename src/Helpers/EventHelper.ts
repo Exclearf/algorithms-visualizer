@@ -7,7 +7,6 @@ function unsubscribe(eventName, listener) {
 }
 
 function publish(eventName, data) {
-  console.log("published an event " + eventName);
   const event = new CustomEvent(eventName, { detail: data });
   document.dispatchEvent(event);
 }

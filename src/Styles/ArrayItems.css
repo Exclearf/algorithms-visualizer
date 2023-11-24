@@ -1,0 +1,17 @@
+.Item {
+  background-color: white;
+  border: solid darkgrey 1px;
+}
+
+.ActiveItem {
+  background-color: #FF4646;
+}
+
+.SwappedItem {
+  background-color: orange !important;
+}
+
+.SortedItem {
+  background-color: rgb(1, 180, 1) !important;
+  border: solid rgb(202, 202, 202) 0.5px;
+}
