@@ -1,66 +1,85 @@
-const insertionSort = (
-  arr,
-  setArrayHandler,
-  buttonHandler,
-  isSortedHandler,
-  changeText
-) => {
-  let newArr = [...arr];
-  let currentIndex = 1;
+import { publish, subscribe } from "../Helpers/EventHelper.ts";
+import { delay } from "../Helpers/VisualiztionHelper.ts";
 
-  const intervalId = setInterval(() => {
-    const currentElement = newArr[currentIndex];
-    let j = currentIndex - 1;
+async function insertionSort(oldArr, setArr) {
+  publish("sortingStarted", null);
 
-    if (newArr[currentIndex]) newArr[currentIndex].isActive = false;
+  let arr = [...oldArr];
+  let pauseSorting: boolean = false;
 
-    newArr.forEach((element) => {
-      element.isActive = false;
-    });
+  subscribe("pauseSorting", () => {
+    pauseSorting = true;
+  });
 
-    newArr[j].isActive = true;
-    newArr[currentIndex].isActive = true;
+  //!Insertion sorting algorithm implementation
+  let n = arr.length;
 
-    while (j >= 0 && parseInt(newArr[j].id) > parseInt(currentElement.id)) {
-      newArr[j + 1] = newArr[j];
-      j--;
-      setArrayHandler([...newArr]);
+  for (let i = 1; i < n; i++) {
+    arr[i].isActive = true;
+    let key = arr[i];
+    let j = i - 1;
+
+    const resetStylesForCurrentIteration = () => {
+      if (arr[i]) {
+        arr[i].isActive = false;
+        arr[i].isSwapped = false;
+      }
+      if (arr[j + 1]) {
+        arr[j + 1].isSwapped = false;
+        arr[i].isActive = false;
+        arr[j + 1].isActive = false;
+      }
+      if (arr[i]) arr[i].isActive = false;
     }
 
-    newArr[j + 1] = currentElement;
-    setArrayHandler([...newArr]);
+    //* Find the correct position for the key
+    while (j >= 0 && arr[j].id > key.id) {
+      arr[j].isActive = true;
+      if (arr[j + 1] && j + 1 != i) arr[j + 1].isActive = false;
 
-    currentIndex++;
+      j = j - 1;
+      setArr([...arr]);
+      await delay(20);
 
-    if (currentIndex >= newArr.length) {
-      clearInterval(intervalId);
-      console.log(j + 1);
-
-      if (newArr[j + 1]) newArr[j + 1].isActive = false;
-
-      if (newArr[newArr.length - 1]) newArr[newArr.length - 1].isActive = false;
-
-      setArrayHandler([...newArr]);
-
-      let currentSortedIndex = 0;
-
-      const sortedIntervalId = setInterval(() => {
-        if (newArr[currentSortedIndex + 1]) {
-          newArr[currentSortedIndex].isSorted = true;
-          newArr[currentSortedIndex + 1].isActive = true;
-          currentSortedIndex++;
-          setArrayHandler([...newArr]);
-        } else {
-          newArr[currentSortedIndex].isSorted = true;
-          setArrayHandler([...newArr]);
-          clearInterval(sortedIntervalId);
-          buttonHandler(false);
-          isSortedHandler(true);
-          changeText("SORT");
-        }
-      }, 1);
+      //* PauseSorting event invoked
+      if (pauseSorting) {
+        publish("sortingStopped", arr);
+        resetStylesForCurrentIteration();
+        setArr(arr);
+        return;
+      }
     }
-  }, 100);
-};
+
+    //* PauseSorting event invoked
+    if (pauseSorting) {
+      publish("sortingStopped", arr);
+      resetStylesForCurrentIteration();
+      setArr(arr);
+      return;
+    }
+
+    arr.splice(j + 1, 0, key);
+    arr.splice(i + 1, 1);
+    if (j < i - 1) {
+      arr[i].isSwapped = true;
+      arr[j + 1].isSwapped = true;
+    }
+    if (arr[j + 2]) arr[j + 2].isActive = false;
+    setArr([...arr]);
+    await delay(20);
+
+    //*Reset styles
+    arr[i].isSwapped = false;
+    arr[j + 1].isSwapped = false;
+    arr[i].isActive = false;
+    arr[j + 1].isActive = false;
+  }
+
+  console.log("Sorting has ended.");
+  if (!pauseSorting) {
+    publish("sortingEnded", arr);
+  }
+  return arr;
+}
 
 export { insertionSort };

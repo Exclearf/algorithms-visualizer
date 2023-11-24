@@ -1,63 +1,66 @@
-const bubbleSort = (arr, setArrayHandler, buttonHandler, isSortedHandler, changeText) => {
-  let isSorted = true;
-  let newArr = [...arr];
-  let sortedCount = 0;
-  let comparisonIndex = 0;
+import { publish, subscribe } from "../Helpers/EventHelper.ts";
+import { delay } from "../Helpers/VisualiztionHelper.ts";
 
-  const intervalId = setInterval(() => {
-    newArr[comparisonIndex].isActive = true;
-    newArr[comparisonIndex + 1].isActive = true;
+async function bubbleSort(oldarr, setArr) {
+  publish("sortingStarted", null);
 
-    if (newArr[comparisonIndex - 1])
-      newArr[comparisonIndex - 1].isActive = false;
+  let arr = [...oldarr];
+  let pauseSorting: boolean = false;
+  let swapped: boolean = false;
 
-    if (comparisonIndex === 0 && newArr[newArr.length - sortedCount - 1]) {
-      newArr[newArr.length - sortedCount - 1].isActive = false;
-      if (newArr[newArr.length - sortedCount])
-        newArr[newArr.length - sortedCount].isActive = false;
-    }
+  subscribe("pauseSorting", () => {
+    pauseSorting = true;
+    return arr;
+  });
 
-    if (
-      parseInt(newArr[comparisonIndex].id) >
-      parseInt(newArr[comparisonIndex + 1].id)
-    ) {
-      isSorted = false;
-      [newArr[comparisonIndex], newArr[comparisonIndex + 1]] = [
-        newArr[comparisonIndex + 1],
-        newArr[comparisonIndex],
-      ];
-    }
+  for (let i = 0; i < arr.length - 1; i++) {
+    for (let j = 0; j <= arr.length - i - 2; j++) {
+      arr[j].isActive = true;
+      arr[j + 1].isActive = true;
 
-    setArrayHandler([...newArr]);
-    comparisonIndex++;
+      setArr([...arr]);
+      await delay(20);
 
-    if (comparisonIndex >= newArr.length - 1 - sortedCount) {
-      comparisonIndex = 0;
-      if (isSorted) {
-        clearInterval(intervalId);
+      if (arr[j].id > arr[j + 1].id) {
+        [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
 
-        let currentSortedIndex = 0;
+        arr[j].isSwapped = true;
+        arr[j + 1].isSwapped = true;
 
-        const sortedIntervalId = setInterval(() => {
-          if (newArr[currentSortedIndex + 1]) {
-            newArr[currentSortedIndex].isSorted = true;
-            newArr[currentSortedIndex + 1].isActive = true;
-            currentSortedIndex++;
-            setArrayHandler([...newArr]);
-          } else {
-            newArr[currentSortedIndex].isSorted = true;
-            setArrayHandler([...newArr]);
-            clearInterval(sortedIntervalId);
-            buttonHandler(false);
-            isSortedHandler(true);
-            changeText("SORT");
-          }
-        }, 1);
-      } else {
-        isSorted = true;
-        sortedCount++;
+        setArr([...arr]);
+        await delay(20);
+
+        arr[j].isSwapped = false;
+        arr[j + 1].isSwapped = false;
+
+        swapped = true;
+      }
+
+      arr[j].isActive = false;
+      arr[j + 1].isActive = false;
+
+      if (pauseSorting) {
+        if (arr[j - 1]) {
+          arr[j - 1].isActive = false;
+        } else {
+          if (arr[arr.length - i - 1]) arr[arr.length - i - 1].isActive = false;
+          if (arr[arr.length - i]) arr[arr.length - i].isActive = false;
+        }
+        publish("sortingStopped", arr);
+        setArr(arr);
+        return;
       }
     }
-  }, 1);
-};
+
+    if (!swapped) {
+      break;
+    }
+    if (i > arr.length - 1) {
+      publish("sortingStopped", arr);
+      return arr;
+    }
+  }
+  publish("sortingEnded", arr);
+  return arr;
+}
 export { bubbleSort };
