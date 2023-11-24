@@ -1,44 +1,50 @@
 import { publish, subscribe } from "../Helpers/EventHelper.tsx";
+import { sleep } from "../Helpers/VisualiztionHelper.tsx";
 
 async function insertionSort(oldArr, setArr) {
   publish("sortingStarted", null);
 
   let arr = [...oldArr];
-  let pauseSorting = false;
+  let pauseSorting: boolean = false;
 
-  for (let i = 1; i < arr.length; i++) {
-    subscribe("pauseSorting", () => {
-      pauseSorting = true;
-    });
+  subscribe("pauseSorting", () => {
+    pauseSorting = true;
+  });
 
-    if (pauseSorting) {
-      pauseSorting = false; 
-      i = arr.length - 1;
-      continue;
-    }
+  // Insertion sorting algorithm implementation
+  let n = arr.length;
 
-    const currentElement = arr[i];
+  for (let i = 1; i < n; i++) {
+    if (pauseSorting) break; // Check for pause
+    arr[i].isActive = true;
+    let key = arr[i];
     let j = i - 1;
 
-    if (arr[i]) arr[i].isActive = true;
+    // Find the correct position for the key
+    while (j >= 0 && arr[j].id > key.id) {
+      arr[j].isActive = true;
+      if (arr[j + 1] && j + 1 != i) arr[j + 1].isActive = false;
 
-    for (j; j >= 0 && arr[j].id > currentElement.id; j--) {
-      arr[j + 1] = arr[j];
+      j = j - 1;
       setArr([...arr]);
+      await sleep(100);
     }
-    arr[j + 1] = currentElement;
-    if (arr[j]) arr[j].isActive = false
 
+    arr.splice(j + 1, 0, key);
+    arr.splice(i + 1, 1);
+    if (j < i - 1) {
+      arr[i].isSwapped = true;
+      arr[j + 1].isSwapped = true;
+    }
+    if (arr[j + 2]) arr[j + 2].isActive = false;
     setArr([...arr]);
-    await new Promise((resolve) => setTimeout(resolve, 20));
+    await sleep(1000);
 
-    if (arr[j + 1]) {
-      arr[j + 1].isActive = false;
-    }
-
-    arr.forEach((element) => {
-      element.isActive = false;
-    });
+    //Reset styles
+    arr[i].isSwapped = false;
+    arr[j + 1].isSwapped = false;
+    arr[i].isActive = false;
+    arr[j + 1].isActive = false;
   }
 
   console.log("Sorting has ended.");
@@ -47,4 +53,3 @@ async function insertionSort(oldArr, setArr) {
 }
 
 export { insertionSort };
-

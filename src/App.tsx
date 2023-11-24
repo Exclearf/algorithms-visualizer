@@ -143,8 +143,9 @@ function App() {
           <div
             className={
               "Item " +
-              (item.isActive ? "ActiveItem " : "") +
-              (item.isSorted ? "SortedItem" : "")
+              (item.isActive ? " ActiveItem" : "") +
+              (item.isSorted ? " SortedItem" : "") +
+              (item.isSwapped ? " SwappedItem" : "") 
             }
             key={item.id}
             style={{

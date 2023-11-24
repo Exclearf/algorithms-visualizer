@@ -57,6 +57,10 @@
   background-color: red;
 }
 
+.SwappedItem {
+  background-color: orange;
+}
+
 .SortedItem {
   background-color: rgb(1, 180, 1) !important;
   border: solid rgb(202, 202, 202) 0.5px;

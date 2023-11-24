@@ -4,6 +4,7 @@ function generateArray(size) {
     height: index * 10,
     isActive: false,
     isSorted: false,
+    isSwapped: false,
   }));
 }
 
