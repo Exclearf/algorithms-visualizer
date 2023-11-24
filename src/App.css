@@ -58,7 +58,7 @@
 }
 
 .SwappedItem {
-  background-color: orange;
+  background-color: orange !important;
 }
 
 .SortedItem {

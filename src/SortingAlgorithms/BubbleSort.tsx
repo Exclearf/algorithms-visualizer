@@ -1,4 +1,5 @@
 import { publish, subscribe } from "../Helpers/EventHelper.tsx";
+import { delay } from "../Helpers/VisualiztionHelper.tsx";
 
 async function bubbleSort(oldarr, setArr) {
   publish("sortingStarted", null);
@@ -11,36 +12,39 @@ async function bubbleSort(oldarr, setArr) {
       arr[j].isActive = true;
       arr[j + 1].isActive = true;
 
+      setArr([...arr]);
+      await delay(20);
+
       if (arr[j].id > arr[j + 1].id) {
         [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+
+        arr[j].isSwapped = true;
+        arr[j + 1].isSwapped = true;
+
+        setArr([...arr]);
+        await delay(20);
+
+        arr[j].isSwapped = false;
+        arr[j + 1].isSwapped = false;
+
         swapped = true;
       }
 
-      if (arr[j - 1]) {
-        arr[j - 1].isActive = false;
-      } else {
-        arr[arr.length - i - 1].isActive = false;
-        if (arr[arr.length - i]) arr[arr.length - i].isActive = false;
-      }
+      arr[j].isActive = false;
+      arr[j + 1].isActive = false;
 
       let callBack = () => {
         if (arr[j - 1]) {
-          console.log("1212312313");
           arr[j - 1].isActive = false;
         } else {
-          console.log("456745674567");
           if (arr[arr.length - i - 1]) arr[arr.length - i - 1].isActive = false;
           if (arr[arr.length - i]) arr[arr.length - i].isActive = false;
         }
         i = arr.length + 1;
         j = arr.length + 1;
-      }
+      };
 
-      if(!i && !j)
-      subscribe("stopSort", callBack);
-
-      setArr([...arr]);
-      await new Promise((resolve) => setTimeout(resolve, 20));
+      if (!i && !j) subscribe("stopSort", callBack);
     }
 
     if (!swapped) {

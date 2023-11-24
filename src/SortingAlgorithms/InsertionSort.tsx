@@ -1,5 +1,5 @@
 import { publish, subscribe } from "../Helpers/EventHelper.tsx";
-import { sleep } from "../Helpers/VisualiztionHelper.tsx";
+import { delay } from "../Helpers/VisualiztionHelper.tsx";
 
 async function insertionSort(oldArr, setArr) {
   publish("sortingStarted", null);
@@ -27,7 +27,7 @@ async function insertionSort(oldArr, setArr) {
 
       j = j - 1;
       setArr([...arr]);
-      await sleep(100);
+      await delay(20);
     }
 
     arr.splice(j + 1, 0, key);
@@ -38,7 +38,7 @@ async function insertionSort(oldArr, setArr) {
     }
     if (arr[j + 2]) arr[j + 2].isActive = false;
     setArr([...arr]);
-    await sleep(1000);
+    await delay(20);
 
     //Reset styles
     arr[i].isSwapped = false;

@@ -57,21 +57,21 @@ function App() {
   //MAIN
 
   const sortingFunctions = {
-    bubbleSort: () => {
+    bubbleSort: async () => {
       console.log("Running Optimized Bubble Sort");
-      bubbleSort(arr, setArr);
+      await bubbleSort(arr, setArr);
     },
-    insertionSort: () => {
+    insertionSort: async () => {
       console.log("Running Insertion Sort");
-      insertionSort(arr, setArr);
+      await insertionSort(arr, setArr);
     },
-    quickSort: () => {
+    quickSort: async () => {
       console.log("Running Insertion Sort");
-      quickSort(arr, setArr);
+      await quickSort(arr, setArr);
     },
-    mergeSort: () => {
+    mergeSort: async () => {
       console.log("Running Insertion Sort");
-      mergeSort(arr, setArr);
+      await mergeSort(arr, setArr);
     },
   };
 
@@ -98,7 +98,7 @@ function App() {
       if (selectedSort && sortingFunctions[selectedSort]) {
         changeText("SORTING...");
 
-        let res = sortingFunctions[selectedSort]();
+        let res =  sortingFunctions[selectedSort]();
         console.log(res);
       }
     }

@@ -1,5 +1,5 @@
-const sleep = async (delay: number) => {
-    await new Promise((resolve) => setTimeout(resolve, delay));
-}
+const delay = async (ms) => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};
 
-export { sleep };
+export { delay };
