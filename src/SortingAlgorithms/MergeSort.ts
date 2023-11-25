@@ -2,7 +2,7 @@ import { publish, subscribe } from "../Helpers/EventHelper.ts";
 import { delay } from "../Helpers/VisualizationHelper.ts";
 
 async function mergeSort(arr, setArr) {
-  publish("sortingStarted", null);
+  publish("sortingStarted", null);  
 
   let pauseSorting: boolean = false;
 
