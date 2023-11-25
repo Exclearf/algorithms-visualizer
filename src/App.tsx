@@ -3,11 +3,7 @@ import React, { useEffect, useState } from "react";
 import { generateArray, shuffleArray } from "./Helpers/ArrayHelper.ts";
 import { publish, subscribe } from "./Helpers/EventHelper.ts";
 import { InitializeRangeWheel } from "./Helpers/RangeWheelHelper.ts";
-
-import { bubbleSort } from "./SortingAlgorithms/BubbleSort.tsx";
-import { insertionSort } from "./SortingAlgorithms/InsertionSort.tsx";
-import { quickSort } from "./SortingAlgorithms/QuickSort.tsx";
-import { mergeSort } from "./SortingAlgorithms/MergeSort.tsx";
+import { bubbleSort, insertionSort, quickSort, mergeSort } from "./SortingAlgorithms/AlgorithmsImport.ts";
 
 import "./App.css";
 import "./Styles/ArrayItems.css";
@@ -89,6 +85,22 @@ function App() {
       console.log("Running Merge Sort");
       await mergeSort(arr, setArr);
     },
+    /*countingSort: async () => {
+      console.log("Running Counting Sort");
+      await mergeSort(arr, setArr);
+    },
+    selectionSort: async () => {
+      console.log("Running Selection Sort");
+      await mergeSort(arr, setArr);
+    },
+    radixSort: async () => {
+      console.log("Running Radix Sort");
+      await mergeSort(arr, setArr);
+    },
+    heapSort: async () => {
+      console.log("Running Heap Sort");
+      await mergeSort(arr, setArr);
+    },*/
   };
 
   function setIsSortedToFalse(array, handler) {
@@ -147,6 +159,10 @@ function App() {
             <option value="insertionSort">Insertion Sort</option>
             <option value="quickSort">Quick Sort</option>
             <option value="mergeSort">Merge Sort</option>
+            <option value="countingSort" disabled>Counting Sort</option>
+            <option value="radixSort" disabled >Radix Sort</option>
+            <option value="heapSort" disabled >Heap Sort</option>
+            <option value="selectionSort" disabled >Selection Sort</option>
           </select>
           <span className="focus"></span>
         </div>
@@ -155,7 +171,7 @@ function App() {
         <div
           className="range-container"
           data-min="10"
-          data-max="100"
+          data-max="200"
           data-default="50"
         >
           <div className="content">
