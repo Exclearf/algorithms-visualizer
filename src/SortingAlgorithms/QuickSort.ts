@@ -1,69 +1,73 @@
-const quickSort = (
-  arr,
-  setArrayHandler,
-) => {
-  const partition = (arr, low, high) => {
-    const pivot = arr[high];
-    let i = low - 1;
+import { publish, subscribe } from "../Helpers/EventHelper.ts";
+import { delay } from "../Helpers/VisualizationHelper.ts";
 
-    const partitionIntervalId = setInterval(() => {
-      for (let j = low; j < high; j++) {
-        arr[j].isActive = true;
-      }
-      setArrayHandler([...arr]);
-      clearInterval(partitionIntervalId);
-    }, 50);
+async function quickSort(oldArr, setArr) {
+  publish("sortingStarted", null);
 
-    for (let j = low; j < high; j++) {
-      if (parseInt(arr[j].id) < parseInt(pivot.id)) {
-        i++;
-        [arr[i], arr[j]] = [arr[j], arr[i]];
+  let arr = [...oldArr];
+  let pauseSorting: boolean = false;
+
+  subscribe("pauseSorting", () => {
+    pauseSorting = true;
+  });
+
+  async function partition(start, end) {
+    let pivotIndex = start;
+    let pivotValue = arr[end];
+
+    for (let i = start; i < end; i++) {
+      if (arr[i].id < pivotValue.id) {
+        [arr[i], arr[pivotIndex]] = [arr[pivotIndex], arr[i]];
+        pivotIndex++;
       }
     }
 
-    [arr[i + 1], arr[high]] = [arr[high], arr[i + 1]];
+    [arr[pivotIndex], arr[end]] = [arr[end], arr[pivotIndex]];
 
-    const swapIntervalId = setInterval(() => {
-      [arr[i + 1], arr[high]] = [arr[high], arr[i + 1]];
-      arr.forEach((item) => {
-        item.isActive = false;
-      });
-      setArrayHandler([...arr]);
-      clearInterval(swapIntervalId);
-    }, 50);
+    return pivotIndex;
+  }
 
-    return i + 1;
-  };
-
-  const quickSortHelper = (arr, low, high) => {
-    if (low < high) {
-      const partitionIndex = partition(arr, low, high);
-
-      const leftQuickSortIntervalId = setInterval(() => {
-        quickSortHelper(arr, low, partitionIndex - 1);
-        clearInterval(leftQuickSortIntervalId);
-      }, 150);
-
-      const rightQuickSortIntervalId = setInterval(() => {
-        quickSortHelper(arr, partitionIndex + 1, high);
-        clearInterval(rightQuickSortIntervalId);
-      }, 150);
+  async function quickSortHelper(start, end) {
+    if (start >= end) {
+      return;
     }
-  };
 
-  quickSortHelper(arr, 0, arr.length - 1);
+    arr[start].isActive = true;
+    arr[end].isActive = true;
 
-  const sortedIntervalId = setInterval(() => {
-    arr.forEach((item, index) => {
-      if (index === arr.length - 1) {
-        item.isSorted = true;
-      } else {
-        item.isSorted = false;
-      }
-    });
-    setArrayHandler([...arr]);
-    clearInterval(sortedIntervalId);
-  }, 100);
-};
+    setArr([...arr]);
+    await delay(20);
+
+    let index = await partition(start, end);
+
+    arr[start].isActive = false;
+    arr[end].isActive = false;
+
+    await delay(20);
+
+    if (pauseSorting) {
+      publish("sortingStopped", arr);
+      setArr(arr);
+      return;
+    }
+
+    await quickSortHelper(start, index - 1);
+    await quickSortHelper(index + 1, end);
+  }
+
+  await quickSortHelper(0, arr.length - 1);
+  
+  arr.forEach((element) => {
+    element.isActive = false;
+  });
+
+  console.log("Sorting has ended.");
+
+  if (!pauseSorting) {
+    publish("sortingEnded", arr);
+  }
+
+  return arr;
+}
 
 export { quickSort };
