@@ -1,6 +1,6 @@
-# Basic React Application to visualize various sorting algorithms. [^1]
-W.I.P.
-##General description
+# Basic React Application to visualize various sorting algorithms. W.I.P. [^1]
+---
+## General description
 Sorting algorithms available:
 * Bubble sort;
 * Insertion sort;
@@ -13,18 +13,16 @@ Psst..😅 Rumor has it that there are going to be:
 - Dynamically generated graphs with the speed of execution
 - Side-by-side algorithms comparison in real time
 And much more... 
-
+---
 ## How to install
 1. Clone the repository.
 2. Run `npm start` in your preferred IDE's terminal.
 3. Wait for webpage to open in your default browser.
-
+---
 ## How to use
 1. Choose an algorithm from avaliable options.
 2. Select an amount of items in your set.
 3. Press button SORT and watch magic happen! 🪄
-
-
-//TODO: Improve description and add details how to build
-
+---
+### Several interesting facts are known to inhabit this area 😉
 [^1]: Originally inspired by a project at University.
