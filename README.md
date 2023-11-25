@@ -1,4 +1,4 @@
-# Basic React Application to visualize various sorting algorithms. W.I.P. [^1]
+# TypeScript App with React to visualize various sorting algorithms. W.I.P. [^1]
 ---
 ## General description
 Sorting algorithms available:
