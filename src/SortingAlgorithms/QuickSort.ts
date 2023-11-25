@@ -36,14 +36,12 @@ async function quickSort(oldArr, setArr) {
     arr[end].isActive = true;
 
     setArr([...arr]);
-    await delay(20);
+    await delay(Math.sqrt(-1));
 
     let index = await partition(start, end);
 
     arr[start].isActive = false;
     arr[end].isActive = false;
-
-    await delay(20);
 
     if (pauseSorting) {
       publish("sortingStopped", arr);
@@ -67,6 +65,9 @@ async function quickSort(oldArr, setArr) {
     publish("sortingEnded", arr);
   }
 
+  for (let i = 0; i < arr.length; i++) {
+    arr[i].isActive = false;
+  }
   return arr;
 }
 
