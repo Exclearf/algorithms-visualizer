@@ -1,13 +1,25 @@
 # Basic React Application to visualize various sorting algorithms. [^1]
 W.I.P.
-Currently only bubble and insertion sorts work, more in active development as well as overall changes!
+##General description
+Sorting algorithms available:
+* Bubble sort;
+* Insertion sort;
+* Merge sort;
+* Quick sort (W.I.P.);
+Many different features are yet to come! 
+Psst..😅 Rumor has it that there are going to be:
+- Visual and hardware speed of execution;
+- Custom delay value;
+- Dynamically generated graphs with the speed of execution
+- Side-by-side algorithms comparison in real time
+And much more... 
 
 ## How to install
 1. Clone the repository.
 2. Run `npm start` in your preferred IDE's terminal.
 3. Wait for webpage to open in your default browser.
 
-## Howw to use
+## How to use
 1. Choose an algorithm from avaliable options.
 2. Select an amount of items in your set.
 3. Press button SORT and watch magic happen! 🪄
