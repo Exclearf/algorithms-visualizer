@@ -16,8 +16,8 @@ Psst..😅 Rumor has it that there are going to be:
 - Heap sort;
 - Visual and hardware speed of execution;
 - Custom delay value;
-- Dynamically generated graphs with the speed of execution
-- Side-by-side algorithms comparison in real time
+- Dynamically generated graphs with the speed of execution;
+- Side-by-side algorithms comparison in real time;
 And much more... 
 ---
 ## How to install
