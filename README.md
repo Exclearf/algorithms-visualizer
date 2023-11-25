@@ -5,7 +5,8 @@ Sorting algorithms available:
 * Bubble sort;
 * Insertion sort;
 * Merge sort;
-* Quick sort (W.I.P.);
+* Quick sort;
+  
 Many different features are yet to come! 
 Psst..😅 Rumor has it that there are going to be:
 - Visual and hardware speed of execution;
