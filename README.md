@@ -6,9 +6,14 @@ Sorting algorithms available:
 * Insertion sort;
 * Merge sort;
 * Quick sort;
+* Selection sort;
   
 Many different features are yet to come! 
 Psst..😅 Rumor has it that there are going to be:
+- Bogo sort;
+- Radix sort;
+- Counting sort;
+- Heap sort;
 - Visual and hardware speed of execution;
 - Custom delay value;
 - Dynamically generated graphs with the speed of execution
