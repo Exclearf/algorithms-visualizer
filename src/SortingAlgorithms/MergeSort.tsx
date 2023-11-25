@@ -13,7 +13,6 @@ async function mergeSort(arr, setArr) {
   async function merge(left, right, origStart, origEnd) {
     let sortedArr: any = [];
     while (left.length && right.length) {
-      
       //* If sortingStopped event invoked
       if (pauseSorting) {
         publish("sortingStopped", arr);
@@ -54,11 +53,11 @@ async function mergeSort(arr, setArr) {
     let newArr = [...sortedArr, ...left, ...right];
     for (let i = origStart, j = 0; i <= origEnd; i++, j++) {
       arr[i] = newArr[j];
-    }
 
-    //* Update the visualization after merging
-    setArr([...arr]);
-    await delay(20);
+      //* Update the visualization while merging
+      setArr([...arr]);
+      await delay(20);
+    }
 
     return newArr;
   }
