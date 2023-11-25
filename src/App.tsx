@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { generateArray, shuffleArray } from "./Helpers/ArrayHelper.ts";
 import { publish, subscribe } from "./Helpers/EventHelper.ts";
 import { InitializeRangeWheel } from "./Helpers/RangeWheelHelper.ts";
-import { bubbleSort, insertionSort, quickSort, mergeSort } from "./SortingAlgorithms/AlgorithmsImport.ts";
+import { bubbleSort, insertionSort, quickSort, mergeSort, selectionSort } from "./SortingAlgorithms/AlgorithmsImport.ts";
 
 import "./App.css";
 import "./Styles/ArrayItems.css";
@@ -85,12 +85,13 @@ function App() {
       console.log("Running Merge Sort");
       await mergeSort(arr, setArr);
     },
-    /*countingSort: async () => {
-      console.log("Running Counting Sort");
-      await mergeSort(arr, setArr);
-    },
     selectionSort: async () => {
       console.log("Running Selection Sort");
+      await selectionSort(arr, setArr);
+    },
+    /*
+    countingSort: async () => {
+      console.log("Running Counting Sort");
       await mergeSort(arr, setArr);
     },
     radixSort: async () => {
@@ -162,7 +163,7 @@ function App() {
             <option value="countingSort" disabled>Counting Sort</option>
             <option value="radixSort" disabled >Radix Sort</option>
             <option value="heapSort" disabled >Heap Sort</option>
-            <option value="selectionSort" disabled >Selection Sort</option>
+            <option value="selectionSort">Selection Sort</option>
           </select>
           <span className="focus"></span>
         </div>
