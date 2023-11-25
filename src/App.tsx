@@ -13,7 +13,7 @@ import "./App.css";
 import "./Styles/ArrayItems.css";
 import "./Styles/Select.css";
 import "./Styles/Button.css";
-import "./Styles/RangeWheel.css"
+import "./Styles/RangeWheel.css";
 
 const WINDOW_HEIGHT = window.innerHeight;
 const WINDOW_WIDTH = window.innerWidth;
@@ -32,7 +32,6 @@ function App() {
 
   //* Initialize the app
   useEffect(() => {
-
     //* Initialize the range input
     //! REWRITE WITH REDUX
     InitializeRangeWheel(setArrLength, setIsSorting);
@@ -54,6 +53,7 @@ function App() {
     subscribe("sortingEnded", async (event) => {
       //* Well-known green thingy :)
       let newArr = [...event.detail];
+
       for (let i = 0; i < newArr.length; i++) {
         newArr[i].isSorted = true;
         setArr([...newArr]);
@@ -82,11 +82,11 @@ function App() {
       await insertionSort(arr, setArr);
     },
     quickSort: async () => {
-      console.log("Running Insertion Sort");
+      console.log("Running Quick Sort");
       await quickSort(arr, setArr);
     },
     mergeSort: async () => {
-      console.log("Running Insertion Sort");
+      console.log("Running Merge Sort");
       await mergeSort(arr, setArr);
     },
   };
@@ -103,7 +103,7 @@ function App() {
   const handleRunSort = async () => {
     if (isSorting) {
       publish("stopSort", null);
-      setIsSorting(true);
+      setIsSorting(false);
     } else {
       if (isSorted) {
         console.log("isSorted is true!");
@@ -196,7 +196,7 @@ function App() {
         </label>
       </div>
 
-      <div className="ItemsContainer" style={{height:  WINDOW_HEIGHT * 0.5}}>
+      <div className="ItemsContainer" style={{ height: WINDOW_HEIGHT * 0.5 }}>
         {arr.map((item) => (
           <div
             className={
@@ -207,8 +207,8 @@ function App() {
             }
             key={item.id}
             style={{
-              height: WINDOW_HEIGHT / arrLength * item.id * 0.5,
-              width: WINDOW_WIDTH / arrLength * 0.8,
+              height: (WINDOW_HEIGHT / arrLength) * item.id * 0.5,
+              width: (WINDOW_WIDTH / arrLength) * 0.8,
             }}
           ></div>
         ))}

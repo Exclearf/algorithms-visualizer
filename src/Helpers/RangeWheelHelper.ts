@@ -1,5 +1,5 @@
 const InitializeRangeWheel = (itemAmountSetter, getIsSorting) => {
-  const rangeContainer = document.querySelector(".range-container");
+  const rangeContainer: any = document.querySelector(".range-container");
   const rangeSVG = rangeContainer.querySelector(".range");
   const selectedValue = rangeContainer.querySelector(".value");
   // the controller of the range
@@ -46,12 +46,12 @@ const InitializeRangeWheel = (itemAmountSetter, getIsSorting) => {
       rangeSVG
         .querySelector("path")
         .setAttribute("style", `stroke-dashoffset: ${strokeVal}`);
-      }
     }
+  }
 
-    // function will do all calculation to update the ui
-    function updateRangeOnDrag(e) {
-      if (!getIsSorting()){
+  // function will do all calculation to update the ui
+  function updateRangeOnDrag(e) {
+    if (!getIsSorting()) {
       const circleRect = rangeSVG.getBoundingClientRect();
       const centerX = circleRect.left + circleRect.width / 2;
       const centerY = circleRect.top + circleRect.height / 2;
@@ -64,9 +64,8 @@ const InitializeRangeWheel = (itemAmountSetter, getIsSorting) => {
       const currentPercentage = (normalizedAngleRadians * 100) / (2 * Math.PI); // Calculate the percentage
 
       updateStroke(currentPercentage);
-      }
     }
-  
+  }
 
   // self called fucntion to update the ui on load
   (function makeDefaultOnLoad() {

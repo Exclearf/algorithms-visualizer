@@ -1,5 +1,5 @@
 import { publish, subscribe } from "../Helpers/EventHelper.ts";
-import { delay } from "../Helpers/VisualiztionHelper.ts";
+import { delay } from "../Helpers/VisualizationHelper.ts";
 
 async function bubbleSort(oldarr, setArr) {
   publish("sortingStarted", null);

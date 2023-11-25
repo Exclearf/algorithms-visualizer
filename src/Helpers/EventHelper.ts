@@ -11,4 +11,4 @@ function publish(eventName, data) {
   document.dispatchEvent(event);
 }
 
-export { publish, subscribe, unsubscribe};
+export { publish, subscribe, unsubscribe };

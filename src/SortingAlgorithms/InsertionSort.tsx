@@ -1,5 +1,5 @@
 import { publish, subscribe } from "../Helpers/EventHelper.ts";
-import { delay } from "../Helpers/VisualiztionHelper.ts";
+import { delay } from "../Helpers/VisualizationHelper.ts";
 
 async function insertionSort(oldArr, setArr) {
   publish("sortingStarted", null);
