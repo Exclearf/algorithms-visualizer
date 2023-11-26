@@ -69,7 +69,7 @@ const InitializeRangeWheel = (itemAmountSetter, getIsSorting) => {
 
   // self called fucntion to update the ui on load
   (function makeDefaultOnLoad() {
-    const defaultPercentage =
+    let defaultPercentage =
       ((rangeDefault - rangeMin) / (rangeMax - rangeMin)) * 100;
     updateStroke(defaultPercentage);
   })();
