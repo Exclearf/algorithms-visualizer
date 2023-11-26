@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { generateArray, shuffleArray } from "./Helpers/ArrayHelper.ts";
 import { publish, subscribe } from "./Helpers/EventHelper.ts";
 import { InitializeRangeWheel } from "./Helpers/RangeWheelHelper.ts";
-import { bubbleSort, insertionSort, quickSort, mergeSort } from "./SortingAlgorithms/AlgorithmsImport.ts";
+import { bubbleSort, insertionSort, quickSort, mergeSort, selectionSort, countingSort } from "./SortingAlgorithms/AlgorithmsImport.ts";
 
 import "./App.css";
 import "./Styles/ArrayItems.css";
@@ -11,11 +11,13 @@ import "./Styles/Select.css";
 import "./Styles/Button.css";
 import "./Styles/RangeWheel.css";
 
-const WINDOW_HEIGHT = window.innerHeight;
-const WINDOW_WIDTH = window.innerWidth;
+import configData from "./config.json";
+
+import Header from "./Components/HeaderComponents/Header.tsx";
+import Body from "./Components/BodyComponents/Body.tsx";
 
 function App() {
-  const [arrLength, setArrLength] = useState(50);
+  const [arrLength, setArrLength] = useState(Math.floor(configData.MAX_ARRAY_LENGTH / 2));
   const [arr, setArr] = useState(shuffleArray(generateArray(arrLength)));
   const [selectedSort, setSelectedSort] = useState("bubbleSort");
   const [isSorting, setIsSorting] = useState(false);
@@ -85,14 +87,15 @@ function App() {
       console.log("Running Merge Sort");
       await mergeSort(arr, setArr);
     },
-    /*countingSort: async () => {
-      console.log("Running Counting Sort");
-      await mergeSort(arr, setArr);
-    },
     selectionSort: async () => {
       console.log("Running Selection Sort");
-      await mergeSort(arr, setArr);
+      await selectionSort(arr, setArr);
     },
+    countingSort: async () => {
+      console.log("Running Counting Sort");
+      await countingSort(arr, setArr);
+    },
+    /*
     radixSort: async () => {
       console.log("Running Radix Sort");
       await mergeSort(arr, setArr);
@@ -132,6 +135,7 @@ function App() {
       }
     }
   };
+
   const changeText = async (newButtonText) => {
     for (let i = 0; i < buttonText.length; i++) {
       setButtonText(buttonText.slice(0, buttonText.length - i));
@@ -145,90 +149,17 @@ function App() {
 
   return (
     <div className="App">
-      <div className="centerDiv">
-        {/* Selector of algorithm */}
-        <div className="select">
-          <select
-            id="sortingAlgorithm"
-            value={selectedSort}
-            onChange={(event) => {
-              setSelectedSort(event.target.value);
-            }}
-          >
-            <option value="BubbleSort">Bubble Sort</option>
-            <option value="insertionSort">Insertion Sort</option>
-            <option value="quickSort">Quick Sort</option>
-            <option value="mergeSort">Merge Sort</option>
-            <option value="countingSort" disabled>Counting Sort</option>
-            <option value="radixSort" disabled >Radix Sort</option>
-            <option value="heapSort" disabled >Heap Sort</option>
-            <option value="selectionSort" disabled >Selection Sort</option>
-          </select>
-          <span className="focus"></span>
-        </div>
-
-        {/* Amount of array items wheel */}
-        <div
-          className="range-container"
-          data-min="10"
-          data-max="200"
-          data-default="50"
-        >
-          <div className="content">
-            <p className="label">ITEMS</p>
-            <p className="value">0</p>
-          </div>
-
-          <svg
-            className="range"
-            width="150px"
-            height="150px"
-            viewBox="0 0 280 280"
-          >
-            <circle
-              stroke-width="24"
-              fill="none"
-              stroke="#FFECEC"
-              cx="140"
-              cy="140"
-              r="128"
-            />
-            <path
-              stroke-dasharray="804.361083984375"
-              stroke-dashoffset="804.361083984375"
-              stroke="#FF4646"
-              stroke-width="24"
-              stroke-linecap="round"
-              fill="none"
-              d=" M 140, 140 m 0, -128 a 128,128 0 0,1 0,256 a -128,-128 0 0,1 0,-256"
-            />
-          </svg>
-        </div>
-
-        {/* Sort button */}
-        <label className="buttonLabel">
-          <input type="checkbox" onClick={handleRunSort} checked={isSorting} />
-          <span className="buttonSpan">{buttonText}</span>
-        </label>
-      </div>
-
-      <div className="ItemsContainer" style={{ height: WINDOW_HEIGHT * 0.5 }}>
-        {arr.map((item) => (
-          <div
-            className={
-              "Item " +
-              (item.isActive ? " ActiveItem" : "") +
-              (item.isSorted ? " SortedItem" : "") +
-              (item.isSwapped ? " SwappedItem" : "")
-            }
-            key={item.id}
-            style={{
-              height: (WINDOW_HEIGHT / arrLength) * item.id * 0.5,
-              width: (WINDOW_WIDTH / arrLength) * 0.8,
-            }}
-          ></div>
-        ))}
-      </div>
+      <Header 
+      selectedSort = {selectedSort}
+      setSelectedSort = {setSelectedSort} 
+      handleRunSort = {handleRunSort}
+      isSorting = {isSorting}
+      buttonText = {buttonText}
+      />
+      <Body 
+      arr = {arr}
+      arrLength = {arrLength}
+      />
     </div>
   );
 }
