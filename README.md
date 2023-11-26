@@ -7,12 +7,12 @@ Sorting algorithms available:
 * Merge sort;
 * Quick sort;
 * Selection sort;
+* Counting sort;
   
 Many different features are yet to come! 
 Psst..😅 Rumor has it that there are going to be:
 - Bogo sort;
 - Radix sort;
-- Counting sort;
 - Heap sort;
 - Visual and hardware speed of execution;
 - Custom delay value;
