@@ -3,7 +3,14 @@ import React, { useEffect, useState } from "react";
 import { generateArray, shuffleArray } from "./Helpers/ArrayHelper.ts";
 import { publish, subscribe } from "./Helpers/EventHelper.ts";
 import { InitializeRangeWheel } from "./Helpers/RangeWheelHelper.ts";
-import { bubbleSort, insertionSort, quickSort, mergeSort, selectionSort, countingSort } from "./SortingAlgorithms/AlgorithmsImport.ts";
+import {
+  bubbleSort,
+  insertionSort,
+  quickSort,
+  mergeSort,
+  selectionSort,
+  countingSort,
+} from "./SortingAlgorithms/AlgorithmsImport.ts";
 
 import "./App.css";
 import "./Styles/ArrayItems.css";
@@ -17,7 +24,9 @@ import Header from "./Components/HeaderComponents/Header.tsx";
 import Body from "./Components/BodyComponents/Body.tsx";
 
 function App() {
-  const [arrLength, setArrLength] = useState(Math.floor(configData.MAX_ARRAY_LENGTH / 2));
+  const [arrLength, setArrLength] = useState(
+    Math.floor(configData.MAX_ARRAY_LENGTH / 2)
+  );
   const [arr, setArr] = useState(shuffleArray(generateArray(arrLength)));
   const [selectedSort, setSelectedSort] = useState("bubbleSort");
   const [isSorting, setIsSorting] = useState(false);
@@ -49,14 +58,27 @@ function App() {
     });
 
     subscribe("sortingEnded", async (event) => {
-      //* Well-known green thingy :)
+      /*
+       * Well-known green thingy :)
+       * Post sort algorithm to alternately set isSorted and isActive on each item.
+       */
       let newArr = [...event.detail];
 
-      for (let i = 0; i < newArr.length; i++) {
-        newArr[i].isSorted = true;
+      for (let i = 1; i < newArr.length; i++) {
+        newArr[i - 1].isSorted = true;
+        newArr[i - 1].isActive = false;
+
+        newArr[i].isActive = true;
+
         setArr([...newArr]);
         await new Promise((resolve) => setTimeout(resolve, 20));
       }
+
+      newArr[newArr.length - 1].isSorted = true;
+      newArr[newArr.length - 1].isActive = false;
+
+      setArr([...newArr]);
+      await new Promise((resolve) => setTimeout(resolve, 20));
 
       setIsSorting(false);
       setIsSorted(true);
@@ -149,17 +171,14 @@ function App() {
 
   return (
     <div className="App">
-      <Header 
-      selectedSort = {selectedSort}
-      setSelectedSort = {setSelectedSort} 
-      handleRunSort = {handleRunSort}
-      isSorting = {isSorting}
-      buttonText = {buttonText}
+      <Header
+        selectedSort={selectedSort}
+        setSelectedSort={setSelectedSort}
+        handleRunSort={handleRunSort}
+        isSorting={isSorting}
+        buttonText={buttonText}
       />
-      <Body 
-      arr = {arr}
-      arrLength = {arrLength}
-      />
+      <Body arr={arr} arrLength={arrLength} />
     </div>
   );
 }
