@@ -1,5 +1,7 @@
 import React from "react";
 
+import configData from "../../config.json";
+
 function Header({
   selectedSort,
   setSelectedSort,
@@ -22,9 +24,7 @@ function Header({
           <option value="insertionSort">Insertion Sort</option>
           <option value="quickSort">Quick Sort</option>
           <option value="mergeSort">Merge Sort</option>
-          <option value="countingSort" disabled>
-            Counting Sort
-          </option>
+          <option value="countingSort">Counting Sort</option>
           <option value="radixSort" disabled>
             Radix Sort
           </option>
@@ -40,8 +40,8 @@ function Header({
       <div
         className="range-container"
         data-min="10"
-        data-max="200"
-        data-default="50"
+        data-max= {configData.MAX_ARRAY_LENGTH}
+        data-default= {Math.floor(configData.MAX_ARRAY_LENGTH / 2)}
       >
         <div className="content">
           <p className="label">ITEMS</p>

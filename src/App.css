@@ -6,9 +6,8 @@
 
 .App {
   text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  display: grid; 
+  grid: 1fr 2fr / 1fr;
   align-items: center;
   height: 100vh;
 }
@@ -17,6 +16,7 @@
   display: flex;
   justify-content: center;
   align-items: flex-end;
+  align-self: self-start;
 }
 
 .centerDiv {

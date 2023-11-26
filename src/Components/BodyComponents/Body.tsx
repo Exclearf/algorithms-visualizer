@@ -1,12 +1,14 @@
 import React from "react";
 
-const WINDOW_HEIGHT = window.innerHeight;
-const WINDOW_WIDTH = window.innerWidth;
+import configData from "../../config.json"
+
+const MAX_ELEM_HEIGHT = window.innerHeight;
+const MAX_ELEM_WIDTH = window.innerWidth;
 
 function Body({ arr, arrLength }) {
     
   return (
-    <div className="ItemsContainer" style={{ height: WINDOW_HEIGHT * 0.5 }}>
+    <div className="ItemsContainer" style={{ height: (MAX_ELEM_HEIGHT / arrLength) * (arrLength + 1) * 0.6 }}>
       {arr.map((item) => (
         <div
           className={
@@ -17,8 +19,8 @@ function Body({ arr, arrLength }) {
           }
           key={item.id}
           style={{
-            height: (WINDOW_HEIGHT / arrLength) * item.id * 0.5,
-            width: (WINDOW_WIDTH / arrLength) * 0.8,
+            height: (MAX_ELEM_HEIGHT / arrLength) * (item.id + 1) * 0.6,
+            width: (MAX_ELEM_WIDTH / arrLength) * 0.85,
           }}
         ></div>
       ))}
