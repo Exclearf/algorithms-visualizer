@@ -39,4 +39,4 @@ And much more to come...
 ---
 
 ### Several interesting facts are known to inhabit this section 😉
-[^1]: Originally inspired by a project at University.
+[^1]: Originally inspired by a project at the Uniwersytet Łódzki.
