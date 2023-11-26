@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { generateArray, shuffleArray } from "./Helpers/ArrayHelper.ts";
 import { publish, subscribe } from "./Helpers/EventHelper.ts";
 import { InitializeRangeWheel } from "./Helpers/RangeWheelHelper.ts";
-import { bubbleSort, insertionSort, quickSort, mergeSort, selectionSort } from "./SortingAlgorithms/AlgorithmsImport.ts";
+import { bubbleSort, insertionSort, quickSort, mergeSort, selectionSort, countingSort } from "./SortingAlgorithms/AlgorithmsImport.ts";
 
 import "./App.css";
 import "./Styles/ArrayItems.css";
@@ -11,12 +11,13 @@ import "./Styles/Select.css";
 import "./Styles/Button.css";
 import "./Styles/RangeWheel.css";
 
+import configData from "./config.json";
+
 import Header from "./Components/HeaderComponents/Header.tsx";
 import Body from "./Components/BodyComponents/Body.tsx";
 
-
 function App() {
-  const [arrLength, setArrLength] = useState(50);
+  const [arrLength, setArrLength] = useState(Math.floor(configData.MAX_ARRAY_LENGTH / 2));
   const [arr, setArr] = useState(shuffleArray(generateArray(arrLength)));
   const [selectedSort, setSelectedSort] = useState("bubbleSort");
   const [isSorting, setIsSorting] = useState(false);
@@ -90,11 +91,11 @@ function App() {
       console.log("Running Selection Sort");
       await selectionSort(arr, setArr);
     },
-    /*
     countingSort: async () => {
       console.log("Running Counting Sort");
-      await mergeSort(arr, setArr);
+      await countingSort(arr, setArr);
     },
+    /*
     radixSort: async () => {
       console.log("Running Radix Sort");
       await mergeSort(arr, setArr);
