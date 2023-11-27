@@ -13,6 +13,11 @@
   transform-origin: center center;
 }
 
+.range-container.disabled { 
+  pointer-events: none;
+  opacity: 0.5;
+}
+
 .range-container .content {
   padding: 0px 0px 0px 25px;
   position: absolute;

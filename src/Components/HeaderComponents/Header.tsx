@@ -38,10 +38,10 @@ function Header({
 
       {/* Amount of array items wheel */}
       <div
-        className="range-container"
-        data-min={configData.MIN_ARRAY_LENGTH}
+        className={`range-container ${isSorting ? 'disabled' : ''}`}
+        data-min="10"
         data-max= {configData.MAX_ARRAY_LENGTH}
-        data-default= {Math.floor((configData.MAX_ARRAY_LENGTH + configData.MIN_ARRAY_LENGTH) / 2)}
+        data-default= {Math.floor(configData.MAX_ARRAY_LENGTH / 2)}
       >
         <div className="content">
           <p className="label">ITEMS</p>
