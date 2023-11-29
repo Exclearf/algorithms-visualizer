@@ -3,14 +3,7 @@ import React, { useEffect, useState } from "react";
 import { generateArray, shuffleArray } from "./Helpers/ArrayHelper.ts";
 import { publish, subscribe } from "./Helpers/EventHelper.ts";
 import { InitializeRangeWheel } from "./Helpers/RangeWheelHelper.ts";
-import {
-  bubbleSort,
-  insertionSort,
-  quickSort,
-  mergeSort,
-  selectionSort,
-  countingSort,
-} from "./SortingAlgorithms/AlgorithmsImport.ts";
+import { bubbleSort, insertionSort, quickSort, mergeSort, selectionSort, countingSort } from "./SortingAlgorithms/AlgorithmsImport.ts";
 
 import "./App.css";
 import "./Styles/ArrayItems.css";
@@ -24,9 +17,7 @@ import Header from "./Components/HeaderComponents/Header.tsx";
 import Body from "./Components/BodyComponents/Body.tsx";
 
 function App() {
-  const [arrLength, setArrLength] = useState(
-    Math.floor(configData.MAX_ARRAY_LENGTH / 2)
-  );
+  const [arrLength, setArrLength] = useState(Math.floor(configData.MAX_ARRAY_LENGTH / 2));
   const [arr, setArr] = useState(shuffleArray(generateArray(arrLength)));
   const [selectedSort, setSelectedSort] = useState("bubbleSort");
   const [isSorting, setIsSorting] = useState(false);
@@ -50,7 +41,6 @@ function App() {
 
     subscribe("sortingStopped", async () => {
       setIsSorting(false);
-
       //? Is it needed?
       //setIsSorted(true);
 
@@ -58,27 +48,14 @@ function App() {
     });
 
     subscribe("sortingEnded", async (event) => {
-      /*
-       * Well-known green thingy :)
-       * Post sort algorithm to alternately set isSorted and isActive on each item.
-       */
+      //* Well-known green thingy :)
       let newArr = [...event.detail];
 
-      for (let i = 1; i < newArr.length; i++) {
-        newArr[i - 1].isSorted = true;
-        newArr[i - 1].isActive = false;
-
-        newArr[i].isActive = true;
-
+      for (let i = 0; i < newArr.length; i++) {
+        newArr[i].isSorted = true;
         setArr([...newArr]);
         await new Promise((resolve) => setTimeout(resolve, 20));
       }
-
-      newArr[newArr.length - 1].isSorted = true;
-      newArr[newArr.length - 1].isActive = false;
-
-      setArr([...newArr]);
-      await new Promise((resolve) => setTimeout(resolve, 20));
 
       setIsSorting(false);
       setIsSorted(true);
@@ -183,4 +160,4 @@ function App() {
   );
 }
 
-export default App;
+export default App; 

@@ -36,7 +36,7 @@ async function quickSort(oldArr, setArr) {
     arr[end].isActive = true;
 
     setArr([...arr]);
-    await delay(Math.sqrt(-1));
+    await delay(20);
 
     let index = await partition(start, end);
 
