@@ -40,6 +40,11 @@ select::-ms-expand {
   background-image: linear-gradient(to top, #f9f9f9, #fff 33%);
 }
 
+.select.disabled { 
+  pointer-events: none;
+  opacity: 0.5;
+}
+
 .select select,
 .select::after {
   grid-area: select;

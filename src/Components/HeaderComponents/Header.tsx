@@ -12,7 +12,7 @@ function Header({
   return (
     <div className="centerDiv">
       {/* Selector of algorithm */}
-      <div className="select">
+      <div className={`select ${isSorting ? 'disabled' : ''}`}>
         <select
           id="sortingAlgorithm"
           value={selectedSort}
